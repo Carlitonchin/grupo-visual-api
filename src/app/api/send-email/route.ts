@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
       }),
     });
 
-    return OkResponse(data);
+    return OkResponse(data).json();
   } catch (error) {
     return NextResponse.error();
   }
