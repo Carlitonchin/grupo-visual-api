@@ -2,6 +2,7 @@ import type { NextRequest } from "next/server";
 import ContactEmailTemplate from "@/app/email-templates/contact-email-template";
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
+import { OkResponse } from "../utils";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const myEmail = process.env.EMAIL_RECEIVE || "";
@@ -26,7 +27,7 @@ export async function POST(req: NextRequest) {
       }),
     });
 
-    return NextResponse.json(data);
+    return OkResponse(data);
   } catch (error) {
     return NextResponse.error();
   }
