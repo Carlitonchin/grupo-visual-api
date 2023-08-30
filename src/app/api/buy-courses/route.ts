@@ -2,7 +2,6 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { OkResponse } from "../utils";
 import axios from "axios";
-import { addDays } from "date-fns";
 import { courses } from "../data";
 
 const url = process.env.PAGARME_URL || "";
@@ -20,13 +19,8 @@ let payments = [
     checkout: {
       customer_editable: true,
       skip_checkout_success_page: false,
-      accepted_payment_methods: ["credit_card", "boleto", "pix"],
+      accepted_payment_methods: ["credit_card", "pix"],
       success_url: "https://www.pagar.me",
-      boleto: {
-        bank: "033",
-        instructions: "Pagar até o vencimento",
-        due_at: "2023-12-25T00:00:00Z",
-      },
       credit_card: {
         capture: true,
         statement_descriptor: "Curso Grupo Visual",
@@ -60,9 +54,7 @@ function createItems(body: any) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const today = new Date();
-    const futureDate = addDays(today, 10);
-    payments[0].checkout.boleto.due_at = futureDate.toISOString();
+
     let items = createItems(body);
 
     const resp = await axios.post(
