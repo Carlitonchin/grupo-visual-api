@@ -23,7 +23,7 @@ export default function BuyTemplate(data: any[]) {
       <table style={{ marginTop: "0.5rem" }}>
         <th>
           <td>
-            <strong>Importe:</strong>
+            <strong>Resumo:</strong>
           </td>
         </th>
       </table>
@@ -82,8 +82,8 @@ export default function BuyTemplate(data: any[]) {
       <table style={{ marginTop: "0.5rem" }}>
         <tr>
           <td>
-            Nossa equipe vai se comunicar com voçê para lhe comunicar os
-            seguintes pasos.
+            Nossa equipe vai se comunicar com voçê para lhe dizer os seguintes
+            pasos.
           </td>
         </tr>
         <tr>
