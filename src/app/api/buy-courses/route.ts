@@ -6,6 +6,7 @@ import { courses } from "../data";
 
 const url = process.env.PAGARME_URL || "";
 const key = process.env.PAGARME_KEY || "";
+const url_site = process.env.URL_SITE || "";
 
 const headers = {
   accept: "application/json",
@@ -18,12 +19,12 @@ let payments = [
     payment_method: "checkout",
     checkout: {
       customer_editable: true,
-      skip_checkout_success_page: false,
+      skip_checkout_success_page: true,
       accepted_payment_methods: ["credit_card", "pix"],
-      success_url: "https://www.pagar.me",
+      success_url: url_site + "obrigado",
       credit_card: {
-        capture: true,
-        statement_descriptor: "Curso Grupo Visual",
+        statement_descriptor: "Grupo Visual",
+        operation_type: "auth_and_capture",
       },
       pix: {
         expires_in: 100000,
@@ -45,6 +46,7 @@ function createItems(body: any) {
       amount: c.price * 100,
       description: c.text,
       quantity: cant,
+      code: c.id + "",
     });
   }
 
@@ -56,7 +58,6 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
 
     let items = createItems(body);
-
     const resp = await axios.post(
       url,
       { items, payments, customer: body.customer },
