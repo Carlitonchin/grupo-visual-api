@@ -1,10 +1,11 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { NextApiRequest } from "next";
 import { OkResponse } from "../utils";
 import axios from "axios";
 import { courses } from "../data";
 
-const url = process.env.PAGARME_URL || "";
+const url_pagarme = process.env.PAGARME_URL || "";
 const key = process.env.PAGARME_KEY || "";
 const url_site = process.env.URL_SITE || "";
 
@@ -19,7 +20,7 @@ let payments = [
     payment_method: "checkout",
     checkout: {
       customer_editable: true,
-      skip_checkout_success_page: true,
+      skip_checkout_success_page: false,
       accepted_payment_methods: ["credit_card", "pix"],
       success_url: url_site + "obrigado",
       credit_card: {
@@ -59,11 +60,24 @@ export async function POST(req: NextRequest) {
 
     let items = createItems(body);
     const resp = await axios.post(
-      url,
+      url_pagarme,
       { items, payments, customer: body.customer },
       { headers: headers }
     );
 
+    return OkResponse(resp.data);
+  } catch (error) {
+    return NextResponse.error();
+  }
+}
+
+export async function GET(req: NextRequest) {
+  try {
+    const url = new URL(req.url);
+    const searchParams = new URLSearchParams(url.search);
+    const getUrl = url_pagarme + "/" + searchParams.get("order");
+    console.log(getUrl);
+    const resp = await axios.get(getUrl, { headers });
     return OkResponse(resp.data);
   } catch (error) {
     return NextResponse.error();
