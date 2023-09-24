@@ -51,7 +51,7 @@ export const courses = [
     stars: 5,
     text: "Youtube",
     url: "/youtube",
-    freeTax: 3,
+    freeTax: 1,
     taxes: 10,
   },
 ];
